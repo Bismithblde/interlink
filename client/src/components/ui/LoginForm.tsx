@@ -1,4 +1,3 @@
-import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import { YStack, XStack, Text, Button, Input, Label, Spinner } from "tamagui";
 import { Alert, Platform } from "react-native";
@@ -18,7 +17,6 @@ const LoginForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const router = useRouter();
 
   const handleSubmit = async () => {
     if (!email || !password) {

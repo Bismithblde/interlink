@@ -61,7 +61,7 @@ export default function Questionnaire() {
 
       console.log("Profile saved:", response.data);
       Alert.alert("Success", "Profile completed!", [
-        { text: "OK", onPress: () => router.replace("/(tabs)/index") }
+        { text: "OK", onPress: () => router.replace("/(tabs)") },
       ]);
     } catch (error: any) {
       console.error("Failed to save profile:", error);
