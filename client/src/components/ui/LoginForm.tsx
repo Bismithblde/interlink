@@ -3,6 +3,7 @@ import { YStack, XStack, Text, Button, Input, Label, Spinner } from "tamagui";
 import { Alert, Platform } from "react-native";
 import { useRouter } from "expo-router";
 import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 // For Expo Go: use your computer's actual IP address
 // Both devices need to be on the same WiFi network
@@ -34,7 +35,12 @@ const LoginForm = () => {
       );
 
       console.log("Login successful:", response.data);
-      router.replace("/FindFriend");
+      
+      // Save token and user_id to AsyncStorage
+      await AsyncStorage.setItem('access_token', response.data.access_token);
+      await AsyncStorage.setItem('user_id', response.data.user_id);
+      
+      router.replace("/(tabs)");
     } catch (error: any) {
       console.error("Login failed:", error);
 
