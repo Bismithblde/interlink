@@ -7,7 +7,7 @@ export default function Index() {
 
   // Redirect based on authentication status
   if (isAuthenticated) {
-    return <Redirect href="/(tabs)" />;
+    return <Redirect href="/(tabs)/index.tsx" />;
   }
 
   return <Redirect href="/(auth)/LoginPage" />;
