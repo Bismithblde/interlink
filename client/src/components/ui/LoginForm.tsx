@@ -1,3 +1,4 @@
+import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import { YStack, XStack, Text, Button, Input, Label, Spinner } from "tamagui";
 import { Alert, Platform } from "react-native";
@@ -13,6 +14,7 @@ const API_URL = Platform.select({
 });
 
 const LoginForm = () => {
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -34,7 +36,7 @@ const LoginForm = () => {
       );
 
       console.log("Login successful:", response.data);
-      Alert.alert("Success", "Login successful!");
+      router.replace("/FindFriend");
     } catch (error: any) {
       console.error("Login failed:", error);
 
