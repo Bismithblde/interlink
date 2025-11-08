@@ -17,6 +17,8 @@
     "@react-navigation/native": "^7.1.8",
     "@tamagui/config": "^1.136.6",
     "@tamagui/input": "^1.136.6",
+    "@tamagui/lucide-icons": "^1.136.6",
+    "@tamagui/portal": "^1.136.6",
     "axios": "^1.13.2",
     "expo": "~54.0.23",
     "expo-constants": "~18.0.10",

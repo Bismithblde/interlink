@@ -1,4 +1,3 @@
-import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import { YStack, XStack, Text, Button, Input, Label, Spinner } from "tamagui";
 import { Alert, Platform } from "react-native";
@@ -6,23 +5,32 @@ import { useRouter } from "expo-router";
 import axios from "axios";
 
 // For Expo Go: use your computer's actual IP address
-// Both devices need to be on the same WiFi network
 const API_URL = Platform.select({
   android: "http://172.24.59.166:8000",
   ios: "http://172.24.59.166:8000",
   default: "http://172.24.59.166:8000",
 });
 
-const LoginForm = () => {
-  const router = useRouter();
+const SignupForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
   const handleSubmit = async () => {
-    if (!email || !password) {
+    if (!email || !password || !confirmPassword) {
       Alert.alert("Error", "Please fill in all fields");
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      Alert.alert("Error", "Passwords don't match");
+      return;
+    }
+
+    if (password.length < 6) {
+      Alert.alert("Error", "Password must be at least 6 characters");
       return;
     }
 
@@ -30,24 +38,27 @@ const LoginForm = () => {
 
     try {
       const response = await axios.post(
-        `${API_URL}/api/v1/auth/login`,
+        `${API_URL}/api/v1/auth/signup`,
         { email, password },
         { timeout: 10000 }
       );
 
-      console.log("Login successful:", response.data);
-      router.replace("/FindFriend");
+      console.log("Signup successful:", response.data);
+      
+      // Navigate to questionnaire with user ID
+      router.push({
+        pathname: "/(auth)/Questionnaire",
+        params: { userId: response.data.id, email: response.data.email }
+      });
     } catch (error: any) {
-      console.error("Login failed:", error);
+      console.error("Signup failed:", error);
 
       if (error.response) {
-        // Backend returned an error
         Alert.alert(
-          "Login Failed",
-          error.response.data?.detail || "Invalid credentials"
+          "Signup Failed",
+          error.response.data?.detail || "Could not create account"
         );
       } else if (error.request) {
-        // Couldn't reach the server
         Alert.alert(
           "Network Error",
           "Can't connect to server. Make sure your backend is running."
@@ -73,11 +84,11 @@ const LoginForm = () => {
       shadowOpacity={0.1}
     >
       <Text fontSize="$8" fontWeight="700" marginBottom="$2">
-        Welcome Back
+        Create Account
       </Text>
 
       <Text fontSize="$4" color="$gray10" marginBottom="$4">
-        Sign in to continue
+        Sign up to get started
       </Text>
 
       <YStack space="$3">
@@ -95,9 +106,8 @@ const LoginForm = () => {
             autoCapitalize="none"
             borderWidth={1}
             borderColor="$gray6"
-            focusStyle={{
-              borderColor: "$blue10",
-            }}
+            focusStyle={{ borderColor: "$blue10" }}
+            disabled={isLoading}
           />
         </YStack>
 
@@ -108,15 +118,32 @@ const LoginForm = () => {
           <Input
             id="password"
             size="$4"
-            placeholder="Enter your password"
+            placeholder="At least 6 characters"
             value={password}
             onChangeText={setPassword}
             secureTextEntry
             borderWidth={1}
             borderColor="$gray6"
-            focusStyle={{
-              borderColor: "$blue10",
-            }}
+            focusStyle={{ borderColor: "$blue10" }}
+            disabled={isLoading}
+          />
+        </YStack>
+
+        <YStack space="$2">
+          <Label htmlFor="confirmPassword" fontSize="$3" fontWeight="600">
+            Confirm Password
+          </Label>
+          <Input
+            id="confirmPassword"
+            size="$4"
+            placeholder="Re-enter your password"
+            value={confirmPassword}
+            onChangeText={setConfirmPassword}
+            secureTextEntry
+            borderWidth={1}
+            borderColor="$gray6"
+            focusStyle={{ borderColor: "$blue10" }}
+            disabled={isLoading}
           />
         </YStack>
       </YStack>
@@ -127,29 +154,27 @@ const LoginForm = () => {
         onPress={handleSubmit}
         marginTop="$4"
         backgroundColor="$blue10"
-        pressStyle={{
-          backgroundColor: "$blue11",
-        }}
+        pressStyle={{ backgroundColor: "$blue11" }}
         disabled={isLoading}
       >
-        {isLoading ? <Spinner color="$white" /> : "Sign In"}
+        {isLoading ? <Spinner color="$white" /> : "Create Account"}
       </Button>
 
       <XStack justifyContent="center" marginTop="$3">
         <Text fontSize="$3" color="$gray11">
-          Don't have an account?{" "}
+          Already have an account?{" "}
         </Text>
         <Text
           fontSize="$3"
           color="$blue10"
           fontWeight="600"
-          onPress={() => router.push("/(auth)/SignupPage")}
+          onPress={() => router.push("/(auth)/LoginPage")}
         >
-          Sign Up
+          Sign In
         </Text>
       </XStack>
     </YStack>
   );
 };
 
-export default LoginForm;
+export default SignupForm;
