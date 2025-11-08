@@ -1,6 +1,6 @@
-import React from 'react';
-import { View, Text } from 'react-native';
-import FindFriendFilter from '@/src/components/ui/FindFriend/FindFriendFilter';
+import React from "react";
+import { View, Text } from "react-native";
+import FindFriendFilter from "@/src/components/ui/FindFriend/FindFriendFilter";
 
 export default function FindFriendPage() {
   return (
