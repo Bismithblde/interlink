@@ -1,21 +1,16 @@
 import React, { useState } from "react";
 import {
   YStack,
-  XStack,
   Text,
   Button,
   Input,
   Label,
   ScrollView,
-  Select,
-  Adapt,
-  Sheet,
 } from "tamagui";
 import { Alert, Platform } from "react-native";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import axios from "axios";
 import { QuestionnaireData } from "@/src/types/user";
-import { Check, ChevronDown } from "@tamagui/lucide-icons";
 
 const API_URL = Platform.select({
   android: "http://172.24.59.166:8000",
@@ -117,37 +112,24 @@ export default function Questionnaire() {
             <Label fontSize="$3" fontWeight="600">
               Gender
             </Label>
-            <Select value={gender} onValueChange={setGender}>
-              <Select.Trigger width="100%" iconAfter={ChevronDown}>
-                <Select.Value placeholder="Select gender" />
-              </Select.Trigger>
-
-              <Adapt when="sm" platform="touch">
-                <Sheet modal dismissOnSnapToBottom>
-                  <Sheet.Frame>
-                    <Sheet.ScrollView>
-                      <Adapt.Contents />
-                    </Sheet.ScrollView>
-                  </Sheet.Frame>
-                  <Sheet.Overlay />
-                </Sheet>
-              </Adapt>
-
-              <Select.Content zIndex={200000}>
-                <Select.ScrollUpButton />
-                <Select.Viewport>
-                  {GENDERS.map((g, i) => (
-                    <Select.Item key={g} index={i} value={g}>
-                      <Select.ItemText>{g}</Select.ItemText>
-                      <Select.ItemIndicator marginLeft="auto">
-                        <Check size={16} />
-                      </Select.ItemIndicator>
-                    </Select.Item>
-                  ))}
-                </Select.Viewport>
-                <Select.ScrollDownButton />
-              </Select.Content>
-            </Select>
+            <YStack space="$2">
+              {GENDERS.map((g) => (
+                <Button
+                  key={g}
+                  size="$4"
+                  onPress={() => setGender(g)}
+                  backgroundColor={gender === g ? "$blue10" : "$gray3"}
+                  color={gender === g ? "$white" : "$gray12"}
+                  borderWidth={1}
+                  borderColor={gender === g ? "$blue10" : "$gray6"}
+                  pressStyle={{
+                    backgroundColor: gender === g ? "$blue11" : "$gray4"
+                  }}
+                >
+                  {g}
+                </Button>
+              ))}
+            </YStack>
           </YStack>
 
           {/* Major */}
