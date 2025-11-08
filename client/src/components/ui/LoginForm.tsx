@@ -1,13 +1,16 @@
 import React, { useState } from "react";
 import { YStack, XStack, Text, Button, Input, Label } from "tamagui";
+import { useRouter } from "expo-router";
 
 const LoginForm = () => {
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const handleSubmit = () => {
     console.log("Login:", { email, password });
     // TODO: Add login logic
+    router.push('/(main)/find-friend');
   };
 
   return (
