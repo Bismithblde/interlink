@@ -3,8 +3,12 @@ import "./globals.css";
 
 export default function Index() {
   // Check if user is authenticated (replace with actual auth check)
-  const isAuthenticated = false; // TODO: Check auth state
+  const isAuthenticated = false; // TODO: Connect to actual auth state management
 
-  // Redirect to login page on app start
+  // Redirect based on authentication status
+  if (isAuthenticated) {
+    return <Redirect href="/(tabs)" />;
+  }
+
   return <Redirect href="/(auth)/LoginPage" />;
 }
